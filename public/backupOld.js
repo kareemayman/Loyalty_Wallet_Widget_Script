@@ -1,4 +1,4 @@
-const scriptName = "loyalty-wallet-widget-fixed.js"
+const scriptName = "loyalty-wallet-widget-with-auth.js"
 let height = window.innerHeight
 let width = window.innerWidth
 
@@ -256,18 +256,32 @@ let width = window.innerWidth
                 line-height: 1.4;
               }
               
-              .retry-button {
+              .login-form {
+                text-align: center;
+                padding: 20px;
+              }
+              
+              .login-form input {
+                width: 100%;
+                padding: 8px 12px;
+                margin: 8px 0;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+              }
+              
+              .login-form button {
                 background: #ff6b35;
                 color: white;
                 border: none;
-                padding: 8px 16px;
+                padding: 10px 20px;
                 border-radius: 4px;
                 cursor: pointer;
+                font-size: 14px;
                 margin-top: 10px;
-                font-size: 12px;
               }
               
-              .retry-button:hover {
+              .login-form button:hover {
                 background: #e55a2b;
               }
             </style>
@@ -330,24 +344,6 @@ let width = window.innerWidth
                 }
               }
               
-              // Clear stored tokens
-              function clearStoredTokens() {
-                localStorage.removeItem('userToken');
-                localStorage.removeItem('userData');
-                currentToken = null;
-              }
-              
-              // Check if token is expired (basic JWT check)
-              function isTokenExpired(token) {
-                try {
-                  const payload = JSON.parse(atob(token.split('.')[1]));
-                  const now = Math.floor(Date.now() / 1000);
-                  return payload.exp && payload.exp < now;
-                } catch (e) {
-                  return true; // If we can't parse it, consider it expired
-                }
-              }
-              
               // Authenticate with the backend
               async function authenticate() {
                 if (isAuthenticating) return;
@@ -401,7 +397,7 @@ let width = window.innerWidth
                 
                 if (!hasToken) {
                   document.getElementById('qr-container').innerHTML = 
-                    '<div class="auth-required"><h3>Authentication Required</h3><p>Please log in to generate QR codes for your loyalty wallet.</p><button onclick="authenticate()" class="retry-button">Login</button></div>';
+                    '<div class="auth-required"><h3>Authentication Required</h3><p>Please log in to generate QR codes for your loyalty wallet.</p><button onclick="authenticate()" style="background: #ff6b35; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-top: 10px;">Login</button></div>';
                 } else {
                   document.getElementById('qr-container').innerHTML = 
                     '<div class="qr-placeholder">QR Code</div>';
@@ -410,14 +406,6 @@ let width = window.innerWidth
               
               // Initialize token on load
               currentToken = getStoredToken();
-              
-              // Check if token is expired
-              if (currentToken && isTokenExpired(currentToken)) {
-                console.log('Token expired, clearing and re-authenticating');
-                clearStoredTokens();
-                currentToken = null;
-              }
-              
               if (!currentToken) {
                 // Auto-authenticate if no token found
                 authenticate();
@@ -436,14 +424,6 @@ let width = window.innerWidth
                   return;
                 }
                 
-                // Check if token is expired before making API call
-                if (isTokenExpired(currentToken)) {
-                  console.log('Token expired, re-authenticating...');
-                  clearStoredTokens();
-                  authenticate();
-                  return;
-                }
-                
                 isLoading = true;
                 showLoading('Generating QR code...');
                 
@@ -457,27 +437,18 @@ let width = window.innerWidth
                 })
                 .then(response => {
                   if (!response.ok) {
-                    // If 401/403, token might be invalid, try to re-authenticate
-                    if (response.status === 401 || response.status === 403) {
-                      console.log('API returned 401/403, clearing token and re-authenticating');
-                      clearStoredTokens();
-                      authenticate();
-                      return;
-                    }
                     throw new Error('Failed to generate QR code: ' + response.status);
                   }
                   return response.blob();
                 })
                 .then(blob => {
-                  if (blob) {
-                    const imgUrl = URL.createObjectURL(blob);
-                    showQRCode(imgUrl);
-                    isLoading = false;
-                  }
+                  const imgUrl = URL.createObjectURL(blob);
+                  showQRCode(imgUrl);
+                  isLoading = false;
                 })
                 .catch(error => {
                   console.error('Error generating QR code:', error);
-                  showError('Failed to generate QR code. Please try again.');
+                  showError('Failed to generate QR code. Please check your authentication and try again.');
                   isLoading = false;
                 });
               }
@@ -494,7 +465,7 @@ let width = window.innerWidth
               
               function showError(message) {
                 const container = document.getElementById('qr-container');
-                container.innerHTML = '<div class="error">' + message + '<br><button onclick="authenticate()" class="retry-button">Retry</button></div>';
+                container.innerHTML = '<div class="error">' + message + '</div>';
               }
             </script>
           </body>
