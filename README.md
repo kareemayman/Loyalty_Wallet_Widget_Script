@@ -162,6 +162,6 @@ For technical support:
 3. Test with the example file to verify functionality
 
 ## Demo
-https://loyalty-wallet-widget-script-cs88r8b39.vercel.app/example-integration.html
+https://loyalty-wallet-widget-script.vercel.app/example-integration.html
 
 **Made with ❤️ for seamless loyalty wallet integration**
