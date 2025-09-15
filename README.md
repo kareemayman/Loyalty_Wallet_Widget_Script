@@ -1,73 +1,166 @@
-# Welcome to your Lovable project
+# Loyalty Wallet Widget
 
-## Project info
+A simple, embeddable loyalty wallet widget that enables organizations to integrate Apple Wallet and Google Wallet functionality into their websites with just one line of code.
 
-**URL**: https://lovable.dev/projects/06b18e02-34bd-4356-bde0-1b5a7d6180af
+## 🚀 Features
 
-## How can I edit this code?
+- **📱 Apple Wallet Integration** - Generate QR codes for Apple Wallet
+- **🤖 Google Wallet Integration** - Generate QR codes for Google Wallet
+- **🎨 Beautiful UI** - Modern, responsive design
+- **⚡ Zero Configuration** - Works out of the box with just a script tag
+- **🔒 Secure** - Uses JWT tokens and iframe isolation
+- **📦 Lightweight** - Single JavaScript file, no dependencies
 
-There are several ways of editing your application.
+## 🚀 Quick Start
 
-**Use Lovable**
+Add this single line to your HTML:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/06b18e02-34bd-4356-bde0-1b5a7d6180af) and start prompting.
+```html
+<script
+  src="https://your-domain.com/loyalty-wallet-widget-with-auth.js?orgId=YOUR_ORG_ID"
+  type="text/javascript"
+  crossorigin="anonymous"
+  async="true"
+  defer="true"
+></script>
+```
 
-Changes made via Lovable will be committed automatically to this repo.
+**That's it!** The widget will automatically:
 
-**Use your preferred IDE**
+1. ✅ Authenticate with the backend
+2. ✅ Appear in the bottom-right corner
+3. ✅ Enable Apple/Google Wallet buttons
+4. ✅ Generate QR codes when clicked
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 📖 Integration Guide
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Step 1: Get Your Organization ID
 
-Follow these steps:
+Contact your backend team to get your unique `orgId`.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Step 2: Add the Script Tag
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Place the script tag before the closing `</body>` tag:
 
-# Step 3: Install the necessary dependencies.
-npm i
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Your Website</title>
+  </head>
+  <body>
+    <!-- Your website content -->
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+    <!-- Loyalty Wallet Widget -->
+    <script
+      src="https://your-domain.com/loyalty-wallet-widget-with-auth.js?orgId=123"
+      type="text/javascript"
+      crossorigin="anonymous"
+      async="true"
+      defer="true"
+    ></script>
+  </body>
+</html>
+```
+
+### Step 3: Test the Integration
+
+1. Open your website
+2. Look for the widget in the bottom-right corner
+3. Click "Add to Apple Wallet" or "Add to Google Wallet"
+4. Scan the generated QR code with your mobile device
+
+## 🎨 Widget Appearance
+
+The widget features:
+
+- **Position**: Bottom-right corner of the page
+- **Size**: 350px × 500px
+- **Design**: Orange gradient background with modern UI
+- **Buttons**: Apple Wallet (black) and Google Wallet (blue)
+- **QR Code**: Generated dynamically when buttons are clicked
+
+## 🛠 Development
+
+### Setup
+
+```bash
+# Clone the repository
+git clone <YOUR_REPO_URL>
+cd loyalty-wallet-widget
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Testing
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Start the dev server: `npm run dev`
+2. Open: `http://localhost:8080/example-integration.html`
+3. The widget should appear and work automatically
 
-**Use GitHub Codespaces**
+## 🚀 Deployment
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Static Hosting (Recommended)
 
-## What technologies are used for this project?
+Deploy the `public/` folder to any static hosting service:
 
-This project is built with:
+- **Netlify**: Drag and drop the `public/` folder
+- **Vercel**: Connect your GitHub repo
+- **GitHub Pages**: Enable Pages in repository settings
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### CDN
 
-## How can I deploy this project?
+Upload `loyalty-wallet-widget-with-auth.js` to a CDN and update the script src:
 
-Simply open [Lovable](https://lovable.dev/projects/06b18e02-34bd-4356-bde0-1b5a7d6180af) and click on Share -> Publish.
+```html
+<script src="https://cdn.your-domain.com/loyalty-wallet-widget-with-auth.js?orgId=123"></script>
+```
 
-## Can I connect a custom domain to my Lovable project?
+## 🔍 Troubleshooting
 
-Yes, you can!
+### Widget Not Appearing
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+**Solutions**:
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- ✅ Check browser console for errors
+- ✅ Verify script URL is correct
+- ✅ Ensure `orgId` parameter is included
+- ✅ Check if the page is served over HTTPS
+
+### QR Code Generation Fails
+
+**Solutions**:
+
+- ✅ Check browser console for error details
+- ✅ Verify API endpoint accessibility
+- ✅ Ensure proper authentication
+
+### CORS Issues
+
+**Solutions**:
+
+- ✅ Serve the widget from the same domain
+- ✅ Configure CORS headers on your API
+- ✅ Use a CDN for the widget script
+
+## 📁 Files
+
+- `loyalty-wallet-widget-with-auth.js` - Main widget script
+- `example-integration.html` - Integration documentation and demo
+- `try-with-auth.html` - Simple test file
+
+## 📞 Support
+
+For technical support:
+
+1. Check the browser console for error messages
+2. Review this documentation for common solutions
+3. Test with the example file to verify functionality
+
+---
+
+**Made with ❤️ for seamless loyalty wallet integration**
