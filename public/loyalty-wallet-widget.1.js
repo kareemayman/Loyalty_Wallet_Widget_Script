@@ -1,4 +1,4 @@
-const scriptName = "newScript.js"
+const scriptName = "loyalty-wallet-widget.1.js"
 let height = window.innerHeight
 let width = window.innerWidth
 
@@ -7,7 +7,7 @@ let width = window.innerWidth
 
   const loadWidget = () => {
     const iframe = document.createElement("iframe")
-    iframe.setAttribute("id", "newScript")
+    iframe.setAttribute("id", "loyalty-wallet-widget.1.js")
     const iframeStyle = iframe.style
     iframeStyle.boxSizing = "borderBox"
     iframeStyle.position = "fixed"
