@@ -7,7 +7,7 @@ let width = window.innerWidth
 
   const loadWidget = () => {
     const iframe = document.createElement("iframe")
-    iframe.setAttribute("id", "loyalty-wallet-widget.1.js")
+    iframe.setAttribute("id", "loyalty-wallet-widget")
     const iframeStyle = iframe.style
     iframeStyle.boxSizing = "borderBox"
     iframeStyle.position = "fixed"
@@ -41,6 +41,7 @@ let width = window.innerWidth
     }
 
     const originUrl = script.getAttribute("src").split(scriptName)[0]
+    console.log(originUrl)
     const nasnavApi = "https://api.dev.meetusvr.com/"
     const yeshteryApi = "https://api-yeshtery.dev.meetusvr.com/v1/"
 
@@ -513,7 +514,7 @@ let width = window.innerWidth
               data = JSON.parse(data)
             } catch (e) {
               // ignore invalid JSON from other senders
-              return
+              return e
             }
           }
 
