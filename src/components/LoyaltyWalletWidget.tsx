@@ -48,10 +48,6 @@ export const LoyaltyWalletWidget = () => {
           };
 
           await login(mockCredentials, "user");
-          toast({
-            title: "Widget Authenticated",
-            description: "Using mock credentials for testing",
-          });
         } catch (error) {
           toast({
             title: "Authentication failed",
