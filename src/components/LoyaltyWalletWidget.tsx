@@ -35,11 +35,23 @@ export const LoyaltyWalletWidget = () => {
   // Mock authentication for widget
   useEffect(() => {
     const authenticateWidget = async () => {
-      if (!user && !isLoading && !isAuthenticating) {
+      // Wait for auth context to finish loading
+      if (isLoading || isAuthenticating) return;
+
+      // Check if we need to authenticate
+      const needsAuth = !user || (user?.token && isTokenExpired(user.token));
+
+      if (needsAuth) {
         setIsAuthenticating(true);
         try {
+          // Clear any existing invalid tokens
+          if (user?.token && isTokenExpired(user.token)) {
+            console.log("Token expired, clearing and re-authenticating");
+            clearStoredTokens();
+            logout();
+          }
+
           // Mock credentials for widget testing
-          // Login will be handled from chat services when it's done
           const mockCredentials = {
             email: "test_user@yopmail.com",
             password: "abc12345",
@@ -61,12 +73,6 @@ export const LoyaltyWalletWidget = () => {
         } finally {
           setIsAuthenticating(false);
         }
-      } else if (user?.token && isTokenExpired(user.token)) {
-        // Token is expired, clear it and re-authenticate
-        console.log("Token expired, clearing and re-authenticating");
-        clearStoredTokens();
-        logout();
-        // This will trigger the useEffect to re-authenticate
       }
     };
 
