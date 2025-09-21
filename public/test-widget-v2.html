@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loyalty Wallet Widget V2 Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .description {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .features {
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .features h3 {
+      color: #333;
+      margin-top: 0;
+    }
+
+    .features ul {
+      color: #666;
+      padding-left: 20px;
+    }
+
+    .integration-code {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    .note {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      color: #856404;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>🎯 Loyalty Wallet Widget V2 Test</h1>
+
+    <div class="description">
+      <p>This page demonstrates the new Loyalty Wallet Widget V2. The widget will appear as a floating button in the
+        bottom-right corner.</p>
+    </div>
+
+    <div class="features">
+      <h3>✨ Widget Features:</h3>
+      <ul>
+        <li><strong>Floating Toggle Button:</strong> Clean, modern design that doesn't interfere with your site</li>
+        <li><strong>Responsive Widget:</strong> Adapts to different screen sizes</li>
+        <li><strong>Easy Integration:</strong> Just add one script tag to your website</li>
+        <li><strong>Organization Support:</strong> Each widget is tied to a specific organization</li>
+        <li><strong>Secure Communication:</strong> Safe parent-iframe messaging</li>
+      </ul>
+    </div>
+
+    <div class="integration-code">
+      <h3>📋 Integration Code:</h3>
+      <pre><code>&lt;script 
+  src="https://your-vercel-app.vercel.app/loyalty-wallet-widget-v2.js?orgId=2" 
+  type="text/javascript" 
+  crossorigin="anonymous" 
+  async="true" 
+  defer="true"&gt;
+&lt;/script&gt;</code></pre>
+    </div>
+
+    <div class="note">
+      <strong>📝 Note:</strong> The widget is currently pointing to localhost for testing.
+      After deploying to Vercel, update the WIDGET_URL in the loader script to your production URL.
+    </div>
+
+    <h3>🎮 How to Test:</h3>
+    <ol>
+      <li>Look for the floating "Loyalty Wallet" button in the bottom-right corner</li>
+      <li>Click the button to open the widget</li>
+      <li>Test the Apple Wallet and Google Wallet buttons</li>
+      <li>Verify QR code generation works</li>
+      <li>Use the × button to close the widget</li>
+    </ol>
+  </div>
+
+  <!-- Load the widget script -->
+  <script src="loyalty-wallet-widget-v2.js?orgId=2" type="text/javascript" crossorigin="anonymous" async="true"
+    defer="true">
+    </script>
+</body>
+
+</html>

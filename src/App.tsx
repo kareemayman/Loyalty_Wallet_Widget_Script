@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import { ShopCheckInLogin } from "@/pages/ShopCheckInLogin";
 import Dashboard from './pages/Dashboard';
 import ReferralSignup from '@/pages/ReferralSignup';
+import LoyaltyWalletWidget from "./components/LoyaltyWalletWidget";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/" element={<Login />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/refferal-signup" element={<ReferralSignup />} />
+            <Route path="/widget" element={<LoyaltyWalletWidget />} />
             <Route 
               path="/user-dashboard" 
               element={
