@@ -1,10 +1,16 @@
 (function () {
   "use strict";
 
-  const scriptName = "loyalty-wallet-widget-v2.js";
+  // const scriptName = "loyalty-wallet-widget.js";
+  
+  // Get script element and extract orgId
+  const script = document.currentScript;
+  const scriptSrc = script.getAttribute("src");
+  const urlParams = new URLSearchParams(scriptSrc.split("?")[1] || "");
+  const orgId = urlParams.get("orgId");
 
   // Configuration
-  const widgetUrl = script.getAttribute("data-widget-url")
+  const widgetUrl = script.getAttribute("data-widget-url") || "http://localhost:8080";
   const WIDGET_URL = `${widgetUrl}/widget`;
   const WIDGET_WIDTH = "400px";
   const WIDGET_HEIGHT = "450px";
@@ -17,12 +23,6 @@
     resize: "resize",
     close: "close",
   };
-
-  // Get script element and extract orgId
-  const script = document.currentScript;
-  const scriptSrc = script.getAttribute("src");
-  const urlParams = new URLSearchParams(scriptSrc.split("?")[1] || "");
-  const orgId = urlParams.get("orgId");
 
   if (!orgId) {
     console.error("Loyalty Wallet Widget: orgId parameter is required");
