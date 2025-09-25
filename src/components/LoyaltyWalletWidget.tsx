@@ -220,9 +220,9 @@ export const LoyaltyWalletWidget = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white p-4">
-      <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+    <div className="min-h-screen bg-white">
+      <div className="w-[fit-content] mx-auto">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100">
           {/* QR Code Section */}
           <div className="text-center mb-6">
             {!walletRes && (
