@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { GradientCard } from "@/components/ui/gradient-card";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Wallet, Apple, Smartphone, QrCode } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { nasnavApi, yeshteryApi } from "@/lib/utils";
 import AppleLogo from "/public/Apple.png";
 import GoogleLogo from "/public/Google.png";
 
 export const LoyaltyWalletWidget = () => {
   const { user, isLoading, login, logout } = useAuth();
-  const { toast } = useToast();
   const [walletRes, setWalletRes] = useState("");
   const [isAppleWallet, setIsAppleWallet] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -51,11 +46,7 @@ export const LoyaltyWalletWidget = () => {
 
           await login(mockCredentials, "user");
         } catch (error) {
-          toast({
-            title: "Authentication failed",
-            description: "Could not authenticate widget",
-            variant: "destructive",
-          });
+          console.error("Authentication failed: Could not authenticate widget", error);
         } finally {
           setIsAuthenticating(false);
         }
@@ -69,13 +60,14 @@ export const LoyaltyWalletWidget = () => {
     };
 
     authenticateWidget();
-  }, [user, isLoading, isAuthenticating, login, logout, toast]);
+  }, [user, isLoading, isAuthenticating, login, logout]);
 
   const handleWalletAction = (type: "apple" | "google") => {
-    toast({
-      title: `${type === "apple" ? "Apple" : "Google"} Wallet`,
-      description: `Opening ${type === "apple" ? "Apple" : "Google"} Wallet integration...`,
-    });
+    console.log(
+      `${type === "apple" ? "Apple" : "Google"} Wallet: Opening ${
+        type === "apple" ? "Apple" : "Google"
+      } Wallet integration...`
+    );
 
     if (type === "apple") return handleAppleWallet();
     handleGoogleWallet();
@@ -83,11 +75,7 @@ export const LoyaltyWalletWidget = () => {
 
   const handleAppleWallet = async () => {
     if (!user?.token) {
-      toast({
-        title: "Authentication required",
-        description: "Please log in to access your loyalty wallet",
-        variant: "destructive",
-      });
+      console.error("Authentication required: Please log in to access your loyalty wallet");
       return;
     }
 
@@ -123,21 +111,16 @@ export const LoyaltyWalletWidget = () => {
       setWalletRes(imgUrl);
       setIsAppleWallet(true);
     } catch (error) {
-      toast({
-        title: "Failed to generate QR code",
-        description: "Please check your authentication and try again",
-        variant: "destructive",
-      });
+      console.error(
+        "Failed to generate QR code: Please check your authentication and try again",
+        error
+      );
     }
   };
 
   const handleGoogleWallet = async () => {
     if (!user?.token) {
-      toast({
-        title: "Authentication required",
-        description: "Please log in to access your loyalty wallet",
-        variant: "destructive",
-      });
+      console.error("Authentication required: Please log in to access your loyalty wallet");
       return;
     }
 
@@ -173,11 +156,10 @@ export const LoyaltyWalletWidget = () => {
       setWalletRes(imgUrl);
       setIsAppleWallet(false);
     } catch (error) {
-      toast({
-        title: "Failed to generate QR code",
-        description: "Please check your authentication and try again",
-        variant: "destructive",
-      });
+      console.error(
+        "Failed to generate QR code: Please check your authentication and try again",
+        error
+      );
     }
   };
 
@@ -245,7 +227,9 @@ export const LoyaltyWalletWidget = () => {
 
           {/* Heading */}
           <div className="text-center mb-2">
-            <h1 className="text-[28px] sm:text-[40px] text-gray-800 font-abeezee font-[400]">Scan Barcode for Bonus Points</h1>
+            <h1 className="text-[28px] sm:text-[40px] text-gray-800 font-abeezee font-[400]">
+              Scan Barcode for Bonus Points
+            </h1>
           </div>
 
           {/* Subtitle */}
@@ -259,7 +243,7 @@ export const LoyaltyWalletWidget = () => {
           <div className="flex gap-6 justify-center">
             <Button
               onClick={() => handleWalletAction("apple")}
-              className="flex-1 bg-white hover:bg-gray-50 text-black border-2 border-[#009BA7] hover:border-[#009BA7] rounded-none py-4 px-8 flex items-center justify-center text-[16px] font-[500] max-w-[165px] max-h-[44px] gap-1.5 sm:max-w-[251px] sm:max-h-[52px] font-abyssinica sm:text-[18px] sm:font-[400] leading-[150%]"
+              className="flex-1 bg-white hover:bg-gray-50 text-black border-2 transition duration-300 active:scale-95 border-[#009BA7] hover:border-[#009BA7] rounded-none py-4 px-8 flex items-center justify-center text-[16px] font-[500] max-w-[165px] max-h-[44px] gap-1.5 sm:max-w-[251px] sm:max-h-[52px] font-abyssinica sm:text-[18px] sm:font-[400] leading-[150%]"
               size="lg"
             >
               <img src={AppleLogo} alt="Apple" className="h-5 w-5" />
@@ -267,7 +251,7 @@ export const LoyaltyWalletWidget = () => {
             </Button>
             <Button
               onClick={() => handleWalletAction("google")}
-              className="flex-1 bg-white hover:bg-gray-50 text-black border-2 border-[#009BA7] hover:border-[#009BA7] rounded-none py-4 px-8 flex items-center justify-center text-[16px] font-[500] max-w-[165px] max-h-[44px] gap-1.5 sm:max-w-[251px] sm:max-h-[52px] font-abyssinica sm:text-[18px] sm:font-[400] leading-[150%]"
+              className="flex-1 bg-white hover:bg-gray-50 text-black border-2 transition duration-300 active:scale-95 border-[#009BA7] hover:border-[#009BA7] rounded-none py-4 px-8 flex items-center justify-center text-[16px] font-[500] max-w-[165px] max-h-[44px] gap-1.5 sm:max-w-[251px] sm:max-h-[52px] font-abyssinica sm:text-[18px] sm:font-[400] leading-[150%]"
               size="lg"
             >
               <img src={GoogleLogo} alt="Google" className="h-5 w-5" />
