@@ -18,6 +18,11 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				abeezee: ['ABeeZee', 'sans-serif'],
+				acme: ['Acme', 'sans-serif'],
+				abyssinica: ['Abyssinica SIL', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',

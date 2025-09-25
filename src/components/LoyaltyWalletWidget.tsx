@@ -7,6 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { Wallet, Apple, Smartphone, QrCode } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { nasnavApi, yeshteryApi } from "@/lib/utils";
+import AppleLogo from "/public/Apple.png";
+import GoogleLogo from "/public/Google.png";
 
 export const LoyaltyWalletWidget = () => {
   const { user, isLoading, login, logout } = useAuth();
@@ -218,53 +220,61 @@ export const LoyaltyWalletWidget = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4">
-      <div className="max-w-md mx-auto">
-        <GradientCard gradient="gold">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-accent-foreground">
-              <Wallet className="h-5 w-5" />
-              Loyalty Wallet
-            </CardTitle>
-            <CardDescription className="text-accent-foreground/80">
-              Add to your mobile wallet
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+    <div className="min-h-screen bg-white p-4">
+      <div className="max-w-2xl mx-auto">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+          {/* QR Code Section */}
+          <div className="text-center mb-6">
+            {!walletRes && (
+              <div className="w-[150px] h-[150px] mx-auto mb-4 bg-gray-100 rounded-lg flex items-center justify-center">
+                <QrCode className="h-16 w-16 text-gray-400" />
+              </div>
+            )}
+            {walletRes && (
+              <div className="mx-auto mb-4 flex items-center justify-center">
+                <img
+                  src={walletRes}
+                  width={150}
+                  height={150}
+                  alt="QR Code"
+                  className="rounded-lg"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Heading */}
+          <div className="text-center mb-2">
+            <h1 className="text-[28px] sm:text-[40px] text-gray-800 font-abeezee font-[400]">Scan Barcode for Bonus Points</h1>
+          </div>
+
+          {/* Subtitle */}
+          <div className="text-center mb-8">
+            <p className="text-[14px] sm:text-[18px] text-[#626262] font-acme font-[400] leading-[150%]">
+              Keep your loyalty wallet pass handy and never miss rewards.
+            </p>
+          </div>
+
+          {/* Wallet Buttons */}
+          <div className="flex gap-6 justify-center">
             <Button
               onClick={() => handleWalletAction("apple")}
-              className="w-full bg-black hover:bg-gray-800 text-white"
+              className="flex-1 bg-white hover:bg-gray-50 text-black border-2 border-[#009BA7] hover:border-[#009BA7] rounded-none py-4 px-8 flex items-center justify-center text-[16px] font-[500] max-w-[165px] max-h-[44px] gap-1.5 sm:max-w-[251px] sm:max-h-[52px] font-abyssinica sm:text-[18px] sm:font-[400] leading-[150%]"
               size="lg"
             >
-              <Apple className="h-5 w-5 mr-2" />
-              Add to Apple Wallet
+              <img src={AppleLogo} alt="Apple" className="h-5 w-5" />
+              <span className="font-medium">Apple</span>
             </Button>
             <Button
               onClick={() => handleWalletAction("google")}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              className="flex-1 bg-white hover:bg-gray-50 text-black border-2 border-[#009BA7] hover:border-[#009BA7] rounded-none py-4 px-8 flex items-center justify-center text-[16px] font-[500] max-w-[165px] max-h-[44px] gap-1.5 sm:max-w-[251px] sm:max-h-[52px] font-abyssinica sm:text-[18px] sm:font-[400] leading-[150%]"
               size="lg"
             >
-              <Smartphone className="h-5 w-5 mr-2" />
-              Add to Google Wallet
+              <img src={GoogleLogo} alt="Google" className="h-5 w-5" />
+              <span className="font-medium">Google</span>
             </Button>
-            <Separator />
-            <div className="text-center">
-              {!walletRes && <QrCode className="h-16 w-16 mx-auto text-muted-foreground mb-2" />}
-              {walletRes && (
-                <img
-                  style={{ margin: "auto" }}
-                  src={walletRes}
-                  width={100}
-                  height={100}
-                  alt="QR Code"
-                />
-              )}
-              <p className="text-sm text-muted-foreground">
-                Scan QR code to access your digital loyalty card
-              </p>
-            </div>
-          </CardContent>
-        </GradientCard>
+          </div>
+        </div>
       </div>
     </div>
   );
