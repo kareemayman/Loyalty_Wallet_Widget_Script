@@ -1,79 +1,95 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { AuthContextType, User, LoginCredentials } from '@/types/auth';
-import { api } from '@/lib/utils';
-import { nasnavApi, yeshteryApi } from '@/lib/utils';
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+import React, { createContext, useContext, useState, useEffect, useRef, ReactNode } from "react"
+type AuthContextType = {
+  user: { token: string } | null
+  login: () => Promise<void>
+  logout: () => void
+  isLoading: boolean
+}
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext)
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider")
   }
-  return context;
-};
+  return context
+}
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [token, setToken] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [tokenError, setTokenError] = useState<string | null>(null)
+  const receivedTokenRef = useRef<string | null>(null)
 
   useEffect(() => {
-    // Check for existing token in localStorage
-    const token = localStorage.getItem('userToken');
-    const userData = localStorage.getItem('userData');
-    
-    if (token && userData) {
-      try {
-        const parsedUser = JSON.parse(userData);
-        setUser({ ...parsedUser, token });
-      } catch (error) {
-        localStorage.removeItem('userToken');
-        localStorage.removeItem('userData');
+    function handleMessage(event: MessageEvent) {
+      if (event.data && event.data.type === "userToken" && event.data.userToken) {
+        receivedTokenRef.current = event.data.userToken
+        localStorage.setItem("userToken", event.data.userToken)
+        setToken(event.data.userToken)
+        setTokenError(null)
+        setIsLoading(false)
       }
     }
-    setIsLoading(false);
-  }, []);
+    window.addEventListener("message", handleMessage)
 
-  const login = async (credentials: LoginCredentials, role: 'admin' | 'user') => {
-    setIsLoading(true);
+    const timeout = setTimeout(() => {
+      if (!receivedTokenRef.current && !localStorage.getItem("userToken")) {
+        setTokenError(
+          "Authentication token not received from parent page. Please refresh or contact support."
+        )
+        setIsLoading(false)
+      }
+    }, 2000)
+
+    // Check for existing token in localStorage (for reloads)
+    const storedToken = localStorage.getItem("userToken")
+    if (storedToken) {
+      setToken(storedToken)
+      receivedTokenRef.current = storedToken
+      setTokenError(null)
+      setIsLoading(false)
+    }
+
+    return () => {
+      window.removeEventListener("message", handleMessage)
+      clearTimeout(timeout)
+    }
+  }, [])
+
+  // login is now a no-op, just ensures token is present
+  const login = async () => {
+    setIsLoading(true)
     try {
-      
-      const mockUser: any = {
-        email:credentials.email,
-        password:credentials.password,
-        orgId:credentials.orgId,
-        isEmployee: credentials.isEmployee,
-        role : role
-    }
-
-      const res = await api.post(yeshteryApi + 'yeshtery/token' , mockUser)
-      const token = await res.data
-
-      localStorage.setItem('userToken', token.token);
-      localStorage.setItem('userData', JSON.stringify({
-        id: mockUser.id,
-        email: mockUser.email,
-        role: mockUser.role , 
-        orgId : credentials.orgId,
-        token : token.token 
-      }));
-      mockUser.token = token?.token
-      setUser(mockUser);
+      const token = receivedTokenRef.current || localStorage.getItem("userToken")
+      if (!token) {
+        setTokenError("No authentication token received.")
+        setIsLoading(false)
+        throw new Error("No authentication token received.")
+      }
+      setToken(token)
+      setTokenError(null)
     } catch (error) {
-      throw new Error('Login failed');
+      setTokenError("Login failed.")
+      throw error
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const logout = () => {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userData');
-    setUser(null);
-  };
+    localStorage.removeItem("userToken")
+    receivedTokenRef.current = null
+    setToken(null)
+  }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
-      {children}
+    <AuthContext.Provider value={{ user: token ? { token } : null, login, logout, isLoading }}>
+      {tokenError ? (
+        <div style={{ color: "red", padding: 16, textAlign: "center" }}>{tokenError}</div>
+      ) : (
+        children
+      )}
     </AuthContext.Provider>
-  );
-};
+  )
+}

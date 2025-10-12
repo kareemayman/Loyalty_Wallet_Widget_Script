@@ -26,40 +26,19 @@ export const LoyaltyWalletWidget = () => {
   // Clear stored tokens
   const clearStoredTokens = () => {
     localStorage.removeItem("userToken");
-    localStorage.removeItem("userData");
   };
 
-  // Mock authentication for widget
+  // Authentication: just check for token, no mock login
   useEffect(() => {
-    const authenticateWidget = async () => {
-      if (!user && !isLoading && !isAuthenticating) {
-        setIsAuthenticating(true);
-        try {
-          // Mock credentials for widget testing
-          // Login will be handled from chat services when it's done
-          const mockCredentials = {
-            email: "test_user@yopmail.com",
-            password: "abc12345",
-            orgId: 2,
-            isEmployee: false,
-          };
-
-          await login(mockCredentials, "user");
-        } catch (error) {
-          console.error("Authentication failed: Could not authenticate widget", error);
-        } finally {
-          setIsAuthenticating(false);
-        }
-      } else if (user?.token && isTokenExpired(user.token)) {
-        // Token is expired, clear it and re-authenticate
-        console.log("Token expired, clearing and re-authenticating");
-        clearStoredTokens();
-        logout();
-        // This will trigger the useEffect to re-authenticate
-      }
-    };
-
-    authenticateWidget();
+    if (!user && !isLoading && !isAuthenticating) {
+      setIsAuthenticating(true);
+      login().finally(() => setIsAuthenticating(false));
+    } else if (user?.token && isTokenExpired(user.token)) {
+      // Token is expired, clear it and logout
+      clearStoredTokens();
+      logout();
+    }
+    // eslint-disable-next-line
   }, [user, isLoading, isAuthenticating, login, logout]);
 
   const handleWalletAction = (type: "apple" | "google") => {
@@ -185,17 +164,8 @@ export const LoyaltyWalletWidget = () => {
           <Wallet className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
           <h2 className="text-2xl font-bold mb-2">Loyalty Wallet</h2>
           <p className="text-muted-foreground mb-4">
-            Unable to authenticate widget. Please try again.
+            Unable to authenticate widget. Please ensure you are logged in on the parent site and refresh the page.
           </p>
-          <Button
-            onClick={() => {
-              setIsAuthenticating(false);
-              // This will trigger the useEffect to retry authentication
-            }}
-            className="bg-gradient-primary"
-          >
-            Retry Authentication
-          </Button>
         </div>
       </div>
     );
