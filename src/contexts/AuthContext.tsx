@@ -20,15 +20,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [isLoading, setIsLoading] = useState(true)
   const [tokenError, setTokenError] = useState<string | null>(null)
   const receivedTokenRef = useRef<string | null>(null)
-  const [savedToken, setSavedToken] = useState<string | null>(null)
-  let savedTokenVariable = null
 
   useEffect(() => {
     function handleMessage(event: MessageEvent) {
       if (event.data && event.data.type === "userToken" && event.data.userToken) {
         receivedTokenRef.current = event.data.userToken
-        savedTokenVariable = event.data.userToken
-        setSavedToken(event.data.userToken)
         localStorage.setItem("userToken", event.data.userToken)
         setToken(event.data.userToken)
         setTokenError(null)
@@ -89,8 +85,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   return (
     <AuthContext.Provider value={{ user: token ? { token } : null, login, logout, isLoading }}>
-      {tokenError && savedTokenVariable || savedToken && tokenError ? (
-        <div style={{ color: "red", padding: 16, textAlign: "center" }}>token exists but {tokenError}</div>
+      {tokenError ? (
+        <div style={{ color: "red", padding: 16, textAlign: "center" }}>{tokenError}</div>
       ) : (
         children
       )}
